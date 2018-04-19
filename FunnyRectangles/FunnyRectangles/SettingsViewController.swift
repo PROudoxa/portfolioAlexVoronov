@@ -48,9 +48,10 @@ class SettingsViewController: UIViewController {
         setupStartValues()
         configureView()
         
-        // TODO: implement handling changing value via numpad
-        widthTextField.isEnabled = false
-        heightTextField.isEnabled = false
+        //UITextFieldDelegate
+        self.widthTextField.delegate = self
+        self.heightTextField.delegate = self
+        addToolBarToKeypad()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -110,6 +111,21 @@ private extension SettingsViewController {
             self.currentHeightLimit = heightLimit
             self.heightSlider.setValue(Float(heightLimit), animated: true)
         }
+        
+        configureTextFields()
+    }
+    
+    func configureTextFields() {
+        
+        widthTextField.layer.cornerRadius = 8.0
+        widthTextField.layer.masksToBounds = true
+        widthTextField.layer.borderWidth = 1
+        widthTextField.layer.borderColor = UIColor.blue.cgColor
+        
+        heightTextField.layer.cornerRadius = 8.0
+        heightTextField.layer.masksToBounds = true
+        heightTextField.layer.borderWidth = 1
+        heightTextField.layer.borderColor = UIColor.blue.cgColor
     }
     
     func saveAsDefaults() {
@@ -118,6 +134,33 @@ private extension SettingsViewController {
         defaults.setValue(randomizeSwitch.isOn, forKeyPath: rotatedBackgroundKey)
         defaults.setValue(currentWidthLimit, forKeyPath: widthLimitKey)
         defaults.setValue(currentHeightLimit, forKeyPath: heightLimitKey)
+    }
+    
+    func addToolBarToKeypad() {
+        //init toolbar
+        let toolbar:UIToolbar = UIToolbar(frame: CGRect(x: 0, y: 0,  width: self.view.frame.size.width, height: 30))
+        //create left side empty space so that done button set on right side
+        let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let doneButton: UIBarButtonItem = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(self.doneButtonAction))
+        toolbar.setItems([flexSpace, doneButton], animated: false)
+        toolbar.sizeToFit()
+        //setting toolbar as inputAccessoryView
+        self.widthTextField.inputAccessoryView = toolbar
+        self.heightTextField.inputAccessoryView = toolbar
+    }
+    
+    @objc func doneButtonAction() {
+        self.view.endEditing(true)
+    }
+    
+    func showAlertFor(failed: String, min: Float, max: Float) {
+        
+        let alertVC = UIAlertController(title: "Wrong data", message: failed + " interval must be\n\(Int(min)) - \(Int(max))", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .cancel)
+        
+        alertVC.addAction(okAction)
+        
+        present(alertVC, animated: true)
     }
 }
 
@@ -129,10 +172,50 @@ extension SettingsViewController {
         switch sender.tag {
         case 1:
             self.currentWidthLimit = Int(sender.value)
+            
         case 2:
             self.currentHeightLimit = Int(sender.value)
+            
         default:
-            print("switch default")
+            print("switch default: unknown slider tag")
         }
+    }
+}
+
+// MARK: UITextFieldDelegate
+extension SettingsViewController: UITextFieldDelegate {
+    
+    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+        
+        switch textField.tag {
+        case 1:
+            guard let availableWidth = Float(textField.text!),
+                availableWidth >= self.widthSlider.minimumValue,
+                availableWidth <= self.widthSlider.maximumValue else {
+                    
+                    showAlertFor(failed: "width", min: self.widthSlider.minimumValue, max: self.widthSlider.maximumValue)
+                    
+                    return false }
+            
+            self.widthSlider.setValue(availableWidth, animated: true)
+            self.currentWidthLimit = Int(availableWidth)
+            
+        case 2:
+            guard let availableHeight = Float(textField.text!),
+                availableHeight >= self.heightSlider.minimumValue,
+                availableHeight <= self.heightSlider.maximumValue else {
+                    
+                    showAlertFor(failed: "height", min: self.heightSlider.minimumValue, max: self.heightSlider.maximumValue)
+                    
+                    return false }
+            
+            self.heightSlider.setValue(availableHeight, animated: true)
+            self.currentHeightLimit = Int(availableHeight)
+            
+        default:
+            print("switch default: unknown textField tag")
+        }
+        
+        return true
     }
 }
