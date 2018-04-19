@@ -76,8 +76,8 @@
 		FA70E2DC20855DB20095F295 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				FA3B6F0D2087778900F0B31D /* DesktopVC */,
 				FA70E2E02085D4530095F295 /* SettingsViewController.swift */,
+				FA3B6F0D2087778900F0B31D /* DesktopVC */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";

@@ -83,7 +83,12 @@ extension DesktopViewController {
         configureRectangle(with: diagonalPoint, durationAnimation: 1.0)
         saveRectangle()
     }
-        
+    
+    @IBAction func addCustomRect(_ sender: UIBarButtonItem) {
+        // TODO: implement adding custom rect
+        print("add tapped")
+    }
+    
     @IBAction func handleDeskLongPress(_ sender: UILongPressGestureRecognizer) {
         
         guard allowedCreating else { allowedCreating = true; return } // next touch on desktop allows creating rect

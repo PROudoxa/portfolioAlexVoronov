@@ -65,12 +65,16 @@
                         </connections>
                     </view>
                     <navigationItem key="navigationItem" title="Desktop" id="YCs-WV-lvd">
-                        <barButtonItem key="leftBarButtonItem" systemItem="edit" id="uQl-Aj-Bnk">
+                        <barButtonItem key="leftBarButtonItem" image="gearwheel" id="uQl-Aj-Bnk">
                             <connections>
-                                <segue destination="g9x-ZJ-nqH" kind="show" identifier="showSettings" id="Eye-Co-GaP"/>
+                                <segue destination="g9x-ZJ-nqH" kind="show" identifier="showSettings" id="BUd-Zq-DEK"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="H1O-3C-BIe"/>
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="H1O-3C-BIe">
+                            <connections>
+                                <action selector="addCustomRect:" destination="BYZ-38-t0r" id="rIM-d8-R6I"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="addRectButton" destination="j3z-9I-qKC" id="KEA-N6-ySZ"/>
@@ -197,7 +201,7 @@
                                 <color key="onTintColor" red="0.043137254899999998" green="0.37647058820000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             </switch>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="alert for autodeleting" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="QBX-WJ-8Ho">
-                                <rect key="frame" x="20.000000000000014" y="82" width="230.33333333333337" height="30"/>
+                                <rect key="frame" x="20" y="82" width="231" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="25"/>
                                 <color key="textColor" red="0.043137254899999998" green="0.37647058820000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
@@ -253,6 +257,7 @@
     </scenes>
     <resources>
         <image name="background1" width="667" height="375"/>
+        <image name="gearwheel" width="30" height="29"/>
         <image name="logo" width="212" height="118"/>
     </resources>
 </document>
